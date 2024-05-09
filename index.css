@@ -16,6 +16,27 @@ code {
   align-items: center; /* Centers items vertically */
   position: relative; /* Needed for absolute positioning of the button */
 }
+#Contact {
+  position: relative;
+  right: 20px;
+}
+#FAQ {
+  position: relative;
+  left: 10px;
+}
+
+a {
+  margin: 5px;
+  font-size: 30px;
+  color: black;
+  text-decoration: none;
+  border: none;
+}
+
+/* The underlining effect */
+a:hover {
+  color: black;
+}
 
 .button {
   position: absolute;
@@ -23,11 +44,17 @@ code {
   right: 0;
 }
 .LogIn {
+  position: relative;
+  float: left;
   width: 50%; /* Adjust the width as needed */
+  height: 70%;
   text-align: center; /* Center the text inside the login box */
   padding: 20px; /* Add some padding for visual appeal */
   margin-right: 20px; /* Space between login and columns */
   font-size: 25px;
+  border-style: solid;
+  border-radius: 15px;
+  left: 40px;
 }
 #username {
   border-radius: 25px;
@@ -40,39 +67,67 @@ code {
   border-radius: 25px;
   background: #edeeeb;
   padding: 20px; 
-  width: 150px;
+  width: 160px;
   height: 10px;  
 }
 .News{
   position : relative;
+  float: right;
   text-align: center;
-  left : 400px;;
-  top : -335px;
-  
+  padding-left: 15px;
+  right: 30px;
+  border-left: 3px solid;
+  height: 500px;
+}
+.main {
+  margin: 10px;
+}
+hr {
+  width: 70%;
+  background-color: black;
 }
 .WebUpdates{
-  padding-left: 30px;
+  position: absolute;
+  margin-left: 30px;
+  width: 75%;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 10px;
 }
 .CompanyInfo img {
-  width: 600px;
-  padding-left: 30px;
+  width: 400px;
+  margin-left: 60px;
+  border-radius: 25px;
 }
 .CompanyInfo {
   margin-left: 30px;
 }
-.left-column {
-  display: flex;
-  flex-direction: column;
-  position: relative; /* Needed for absolute positioning of pseudo-element */
-  padding-right: 20px;
+.footer {
+  height: 120px;
+  background: #cd92d1;
+  padding-top: 2%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.fa {
+  font-size: 21px;
+  width: 3px;
+  text-align: center;
+  text-decoration: none;
+  padding: 5px;
+  color: black;
 }
 
-.left-column::after {
-  content: "";
-  position: absolute;
-  right: 0; /* Aligns the line to the right side of the left-column */
-  top: 0; /* Starts from the top of the column */
-  bottom: 0; /* Stretches to the bottom */
-  width: 2px; /* Thickness of the line */
-  background-color: #ccc; /* Color of the line */
+.fa:hover {
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+.socials {
+  font-family: Helvetica;
+  font-size: 15px;
+}
+.terms {
+  position: relative;
+  margin-left: 45%;
 }
