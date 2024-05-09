@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif; /* Poppins is a modern, clean font that often looks "sexy" */
+  background-color: #ebbdc4; /* Light pink color */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: 'Fira Code', monospace; /* Fira Code is a stylish monospace font with programming ligatures */
+  color: #ebbfc5; /* Light pink color */
+}
+.header {
+  display: flex; /* Enables Flexbox */
+  justify-content: space-between; /* Distributes space between the elements */
+  align-items: center; /* Centers items vertically */
+  position: relative; /* Needed for absolute positioning of the button */
+}
+
+.button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.LogIn {
+  width: 50%; /* Adjust the width as needed */
+  text-align: center; /* Center the text inside the login box */
+  padding: 20px; /* Add some padding for visual appeal */
+  margin-right: 20px; /* Space between login and columns */
+  font-size: 25px;
+}
+#username {
+  border-radius: 25px;
+  background: #eff0ed;
+  padding: 20px; 
+  width: 170px;
+  height: 10px;  
+}
+#password {
+  border-radius: 25px;
+  background: #edeeeb;
+  padding: 20px; 
+  width: 150px;
+  height: 10px;  
+}
+.News{
+  position : relative;
+  text-align: center;
+  left : 400px;;
+  top : -335px;
+  
+}
+.WebUpdates{
+  padding-left: 30px;
+}
+.CompanyInfo img {
+  width: 600px;
+  padding-left: 30px;
+}
+.CompanyInfo {
+  margin-left: 30px;
+}
+.left-column {
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Needed for absolute positioning of pseudo-element */
+  padding-right: 20px;
+}
+
+.left-column::after {
+  content: "";
+  position: absolute;
+  right: 0; /* Aligns the line to the right side of the left-column */
+  top: 0; /* Starts from the top of the column */
+  bottom: 0; /* Stretches to the bottom */
+  width: 2px; /* Thickness of the line */
+  background-color: #ccc; /* Color of the line */
+}
