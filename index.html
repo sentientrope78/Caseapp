@@ -1,121 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app">
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>React App</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
-  </head>
-  <body>
+</head>
+<body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-
-    <div class="header">
-      <a href="#" id="FAQ">FAQ</a>
-      <a href="index.html" id="title">Treatify</a>
-      <a href="#" id="Contact">Contact Us</a>
-    </div>
-
-    <br><br><br>
     
-    <div class="main">
-    <div class="LogIn">
-      <h3>Please enter your information</h3>
-      <form action="" method="post" autocomplete="on">
-        <input type="text" id="username" name="username" placeholder="Username"><br>
-        <input type="text" id="password" name="password" placeholder="Password"> <br> <br>
-        <input type="submit" value="Sign In">
-        <input type="submit" value="Register">
-      </form>
-    </div>
-
-    <div class="News">
-        <h3>Medical Updates</h3>
-        <a href="https://globalnews.ca/news/10481990/ontario-doctors-supply-ministry-health/" target="_blank">
-          <img src="https://images.pexels.com/photos/19976580/pexels-photo-19976580/free-photo-of-dentists-examining-a-patient-at-a-dental-clinic.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Ontario doctor shortage" class="news-img">
-          <p>Doctor shortage in Ontario</p>
-        </a>
-        <a href="https://www.chinadaily.com.cn/a/202405/09/WS663c2625a31082fc043c615d.html" target="_blank">
-          <img src="https://images.pexels.com/photos/6942171/pexels-photo-6942171.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Diabetes treatment breakthrough Shanghai" class="news-img">
-          <p>Doctors breakthrough with diabetes treatment in Shanghai</p>
-        </a>
-      </div>
-  </div>
-
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <hr>
-    <div class="WebUpdates alert alert-info">
-      <p>Website Issue Updates</p>
-    </div>
-
-    <br><br><br><br><br>
-    <div class="CompanyInfo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/M%C3%BCnster%2C_LVM%2C_B%C3%BCrogeb%C3%A4ude_--_2013_--_5149-51.jpg" alt="company">
-      <br><br>
-      <h3>Company Information</h3>
-      <p>Your mom</p>
-    </div>
-
-    <br><br><br>
-    <div class="footer">
-          <div class="socials">
-            <p>Find us on other social media platforms!</p>
-            <a href="mailto:amitbijlani13@gmail.com" target="_blank" class="fa fa-google"></a>
-            <a href="https://www.facebook.com/amit.bijlani.9404/" target="_blank" class="fa fa-facebook"></a>
-            <a href="https://twitter.com/awesomenessamit" target="_blank" class="fa fa-twitter"></a>
-            <a href="https://www.linkedin.com/in/amit-bijlani/" target="_blank" class="fa fa-linkedin"></a>
-            <a href="https://www.youtube.com/channel/UCWVB1eSIblD4jUPzIvXxyjw" target="_blank" class="fa fa-youtube"></a>
-            <a href="https://www.instagram.com/amitr1016/" target="_blank" class="fa fa-instagram"></a>
-            <a href="https://in.pinterest.com/amitbijlani13/_saved/" target="_blank" class="fa fa-pinterest"></a>
-            <a href="https://www.snapchat.com/add/amitriya14" target="_blank" class="fa fa-snapchat-ghost"></a>
-          </div>
-          <div class="terms">
-            <p>&copy; 2024 Amit and Waleed</p>
-          </div>
-      </div>
-
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    <div id="root"></div>
+</body>
 </html>
