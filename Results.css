@@ -1,0 +1,19 @@
+.row {
+    display: flex;
+  }
+  
+  .column {
+    flex: 50%;
+    text-align: center;
+    height: 500px;
+  }
+
+  .Analysis {
+    background-color: antiquewhite;
+    border-right: 3px black;
+  }
+
+  .Recommendations {
+    background-color: aliceblue;
+    border-left: 3px black;
+  }
