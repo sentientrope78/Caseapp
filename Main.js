@@ -25,7 +25,7 @@ function Login() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        window.location.href = "https://stackoverflow.com/questions/503093/how-do-i-redirect-to-another-webpage";
+        window.location.href = "/upload";
     };
 
     return (
