@@ -1,15 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client'; // Correct import for React 18
-import './index.css';
-import App from './App';
-import { Router } from 'react-router-dom';
+import express from "express"
+import mysql from "mysql"
+import fs from "fs"
+import path from "path"
 
-// Create a root.
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const app = express();
+const port = 3001;
 
-// Initial render
-root.render(
-  <React.StrictMode>
-      <App />
-  </React.StrictMode>
-);
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Effy1234',
+  database: 'nigger',
+  port: 3306
+});
+
+app.listen(port, () => {
+  console.log("Server running at http://localhost:${port}");
+});
+
+app.get("/", (req,res) => {
+  res.json("Let's go mfs")
+})
+
+app.get("/usercredentials", (req, res) => {
+  const q = "Select * FROM usercredentials"
+  db.query(q, (err, data) => {
+    if(err) return res.json(err)
+    return res.json(data)
+  })
+})
