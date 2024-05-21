@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import axios from "axios"
 import './Main.css';
 
 function Main() {
@@ -22,10 +24,33 @@ function Main1() {
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [userData, setUserData] = useState([])
+    console.log(username);
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const res = await axios.get("http://localhost:3001/usercredentials")
+                const data = res.data
+                console.log(data);
+                setUserData(res.data)
+                console.log(userData);
+            
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData()
+    },[username,password])
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        window.location.href = "/upload";
+        {userData.map(data=>{
+            console.log(data.username);
+            if (username==data.username && password==data.password) {
+                window.location.href = "/upload"
+        } 
+            }
+        )}
     };
 
     return (
