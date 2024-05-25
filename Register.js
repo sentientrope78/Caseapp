@@ -1,12 +1,12 @@
 import React from 'react';
 import './Register.css';
 
-function Upload() {
+function Register() {
   return (
-    <div className="Upload">
+    <div className="Register">
         <h1>No Black Niggers allowed to use our Service!</h1>
     </div>
   );
 }
 
-export default Upload;
+export default Register;
