@@ -11,7 +11,11 @@ function Upload() {
         <h1>Logged In</h1>
         <br></br>
         <h1>Upload Your File Below, you black monkey</h1>
-        <button onClick={handleClick}>Upload</button>
+        <button>Upload</button>
+        <div className='showResults'>
+          <button id='Cancel'>Cancel?</button>
+          <button id='Continue' onClick={handleClick}>Continue?</button>
+        </div>
     </div>
   );
 }
