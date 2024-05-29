@@ -53,6 +53,11 @@ function Login() {
         )}
     };
 
+    const handleClick = (event) => {
+        event.preventDefault()
+        window.location.href = "/register"
+      }
+
     return (
         <div className="LogIn">
             <h3>Please enter your information</h3>
@@ -60,7 +65,7 @@ function Login() {
                 <input type="text" id="username" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} /><br />
                 <input type="password" id="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} /><br /><br />
                 <button type="submit">Sign In</button>
-                <button type="button" onClick={() => alert('Redirect to register')}>Register</button>
+                <button type="button" onClick={handleClick}>Register</button>
             </form>
         </div>
     );
