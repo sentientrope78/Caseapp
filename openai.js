@@ -1,13 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
+import 'dotenv/config'; // Ensure dotenv is imported to load environment variables
 
-// Directly configure OpenAI with the API key
-const configuration = new Configuration({
-  apiKey: "sk-proj-ky2WcQRoryNFscIeOmTeT3BlbkFJdxvNKTM86UaDUDKg5t9t",
-});
-const openai = new OpenAIApi(configuration);
+const openai = new OpenAI({apiKey: "sk-proj-ky2WcQRoryNFscIeOmTeT3BlbkFJdxvNKTM86UaDUDKg5t9t"});
 
 // Setup server
 const app = express();
@@ -19,13 +16,13 @@ app.post('/chat', async (req, res) => {
   const { prompt } = req.body;
 
   try {
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
+    const completion = await openai.completions.create({
+      model: 'gpt-3.5-turbo-instruct',
       prompt: prompt,
       max_tokens: 512,
       temperature: 0,
     });
-    res.send(completion.data.choices[0].text);
+    res.send(completion.choices[0].text);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send(error.message);
