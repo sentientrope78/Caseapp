@@ -3,6 +3,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './chatbot.css';
+import express from 'express';
+import { response } from 'express';
+import cors from 'cors';
+
+const app = express();
+app.use(express.json())
+app.use(cors());
 
 const Chatbot = () => {
   const [input, setInput] = useState('');
@@ -13,14 +20,18 @@ const Chatbot = () => {
 
     const userMessage = { role: 'user', content: input };
     setMessages([...messages, userMessage]);
-
+    console.log(input)
+    console.log(messages);
     try {
-      const response = await axios.post('http://localhost:8080/chat', { prompt: input });
+      const response = await axios.post('http://localhost:8000/chat', { prompt: input });
       const botMessage = { role: 'bot', content: response.data };
+      console.log(botMessage);
       setMessages([...messages, userMessage, botMessage]);
+      console.log(messages);
     } catch (error) {
       console.error('Error sending message:', error);
     }
+    console.log(userMessage);
 
     setInput('');
   };
