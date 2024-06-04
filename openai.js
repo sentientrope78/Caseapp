@@ -1,4 +1,5 @@
 import express from 'express';
+import mysql from "mysql"
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import OpenAI from 'openai';
@@ -7,6 +8,14 @@ import 'dotenv/config'; // Ensure dotenv is imported to load environment variabl
 const openai = new OpenAI({apiKey: "sk-proj-ky2WcQRoryNFscIeOmTeT3BlbkFJdxvNKTM86UaDUDKg5t9t"});
 
 // Setup server
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'Effy1234',
+  database: 'nigger',
+  port: 3306
+});
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -17,7 +26,7 @@ app.post('/chat', async (req, res) => {
 
   try {
     const completion = await openai.completions.create({
-      model: 'gpt-3.5-turbo-instruct',
+      model: 'text-davinci-003',
       prompt: prompt,
       max_tokens: 512,
       temperature: 0,
@@ -29,7 +38,7 @@ app.post('/chat', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
