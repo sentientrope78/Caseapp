@@ -64,4 +64,9 @@
 
   .response-container {
     float: none;
+    background-color: #e0adc6;
+    text-align: justify;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
   }
