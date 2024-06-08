@@ -10,18 +10,29 @@ export default function Chatbot() {
 
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
   const HTTP = "http://localhost:8002/chat";
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setIsTyping(true);
+    setIsAnswered(false)
+    console.log(isTyping);
+    console.log(isAnswered);
     axios
       .post(HTTP, { prompt })
       .then((res) => {
         setResponse(res.data);
+        setIsTyping(false);
+        setIsAnswered(true)
+        console.log(isTyping);
+        console.log(isAnswered);
+        console.log(prompt);
         console.log(res.data);
       })
       .catch((error) => {
+        setIsTyping(false);
         console.log(error);
       });
 
@@ -74,7 +85,7 @@ export default function Chatbot() {
         <button className='closeBot' onClick={()=>{setOpen(false)}}>&#x2718;</button>
         <h1 className="chatbot-header">Treatify Bot</h1>
         <div className="form-group">
-        <p>Bot: Hi, and welcome to Treatify! My name is NiggerRapist.</p>
+        <p><strong>Bot: </strong>Hi, and welcome to Treatify! My name is NiggerRapist.</p>
         <form className="form" onSubmit={handleSubmit}>
             <input
               id="prompt"
@@ -83,12 +94,12 @@ export default function Chatbot() {
               value={prompt}
               onChange={handlePrompt}
             />
-          <button className="submitButton" type="submit"><i class="fa fa-search"></i></button> <br></br>
+          <button className="submitButton" type="submit"><i className="fa fa-search"></i></button> <br></br>
         </form>
         </div> <br></br>
         <div className="response-container">
           <p className="text-light">
-            {response ? response : "Ask me anything..."}
+            {isAnswered ? response : isTyping && <p>Bot is typing...</p>}
           </p>
         </div>
       </div>
