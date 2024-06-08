@@ -1,8 +1,13 @@
-import React, { useState } from "react";
-import axios from "axios";
-import './Chatbot.css';  // Import the CSS file for styling
+// src/components/chatbot.js
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import './chatbot.css';
+import logo from './logo.png'
+
 
 export default function Chatbot() {
+
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const HTTP = "http://localhost:8002/chat";
@@ -23,36 +28,71 @@ export default function Chatbot() {
     setPrompt("");
   };
 
+  const [open,setOpen] = useState(false)
+    const botStyle = {
+      display: open ? "block" : "none",
+      opacity: open ? "1" : "0",
+      position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      width: "300px",
+      height: "300px",
+      backgroundColor: "#ffe4e1",
+      border: "2px solid #ff69b4",
+      borderRadius: "10px",
+      boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+      overflow: "auto"
+  };
+  const myStyle = {
+    position: "fixed",
+    bottom: "20px",
+    right: "20px",
+    width: open ? "300px" : "100px",
+    height: open ? "300px" : "100px",
+    backgroundColor: "#ffe4e1",
+    border: "2px solid #ff69b4",
+    borderRadius: open ? "10px" : "50%",
+    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+    overflow: "hidden"
+};
+    const iconStyle = {
+      display: open ? "none" : "block",
+      opacity: open ? "0" : "1",
+      cursor: "pointer",
+      margin: "auto"
+    }
+
   const handlePrompt = (e) => {
     setPrompt(e.target.value);
   };
 
   return (
-    <div className="chatbot-container">
-      <div className="chatbot">
-        <h1 className="title text-center text-darkGreen">ChatGPT API</h1>
+    
+    <div className="chatbot-container" style={myStyle}>
+      <img src={logo} style={iconStyle} onClick={()=>{setOpen(true)}} className='logo'></img>
+      <div className="chatbot" style={botStyle}>
+        <button className='closeBot' onClick={()=>{setOpen(false)}}>&#x2718;</button>
+        <h1 className="chatbot-header">Treatify Bot</h1>
+        <div className="form-group">
+        <p>Bot: Hi, and welcome to Treatify! My name is NiggerRapist.</p>
         <form className="form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="prompt">Ask questions</label>
             <input
               id="prompt"
-              className="shadow-sm"
               type="text"
-              placeholder="Enter text"
+              placeholder="How can I help?"
               value={prompt}
               onChange={handlePrompt}
             />
-          </div>
-          <button className="btn btn-accept w-100" type="submit">
-            Go
-          </button>
+          <button className="submitButton" type="submit"><i class="fa fa-search"></i></button> <br></br>
         </form>
-        <div className="response-container bg-darkGreen mt-2 p-1 border-5">
+        </div> <br></br>
+        <div className="response-container">
           <p className="text-light">
             {response ? response : "Ask me anything..."}
           </p>
         </div>
       </div>
     </div>
+
   );
-}
+};
