@@ -19,7 +19,7 @@ app.post('/chat', async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
-        { "role": "system", "content": "You are a helpful assistant." },
+        { "role": "system", "content": "You are a helpful assistant for treatify, which is a medtech company. It is meant for doctors to analyze patient reports quickly and give medicine recommendations." },
         { "role": "user", "content": prompt }
       ],
       max_tokens: 512,
