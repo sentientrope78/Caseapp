@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import OpenAI from 'openai';
 import 'dotenv/config'; // Ensure dotenv is imported to load environment variables
 
-const openai = new OpenAI({ apiKey: "sk-proj-ky2WcQRoryNFscIeOmTeT3BlbkFJdxvNKTM86UaDUDKg5t9t" });
+const openai = new OpenAI({ apiKey: "" });
 
 const app = express();
 app.use(bodyParser.json());
