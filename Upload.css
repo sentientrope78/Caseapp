@@ -1,32 +1,47 @@
 body {
-    text-align: center;
+  text-align: center;
 }
+
 #uploadFile {
-    padding: 15px;
-    width: 100px;
-    background-color: #96dc83;
-    text-align: center;
-    font-size: 16px;
-    border-radius: 12px;
+  padding: 15px;
+  width: 100px;
+  background-color: #96dc83;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 12px;
 }
+
+#unpreviewFile {
+  padding: 15px;
+  width: 100px;
+  background-color: #f91109;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
 .showResults {
-    display: none;
+  display: none;
 }
+
 #Cancel {
-    margin: 10px;
-    padding: 15px;
-    width: 100px;
-    background-color: #d9dcb2;
-    text-align: center;
-    font-size: 16px;
-    border-radius: 12px;
+  margin: 10px;
+  padding: 15px;
+  width: 100px;
+  background-color: #d9dcb2;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 12px;
 }
+
 #Continue {
-    margin: 10px;
-    padding: 15px;
-    width: 100px;
-    background-color: #d9dcb2;
-    text-align: center;
-    font-size: 16px;
-    border-radius: 12px;
+  margin: 10px;
+  padding: 15px;
+  width: 100px;
+  background-color: #d9dcb2;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 12px;
 }
+
+
