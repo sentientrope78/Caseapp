@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useRef } from 'react';
 import './Upload.css';
@@ -9,7 +10,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
-import 'bootstrap/dist/css/bootstrap.css';
+
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -23,6 +24,7 @@ function Upload() {
     $(".showResults").fadeIn(3000);
   };
 
+  const [uploadedFileName, setUploadedFileName] = useState(null);
   const inputRef = useRef(null);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -54,7 +56,8 @@ function Upload() {
 
   const handlePdfFileSubmit = (e) => {
     e.preventDefault();
-    inputRef.current?.click();
+    inputRef.current?.click() &&
+    setUploadedFileName(inputRef.current.files[0].name);
     if (pdfFile !== null) {
       setViewPdf(pdfFile);
     } else {
@@ -116,8 +119,10 @@ function Upload() {
           <div className="m-3">
             <label className="mx-3">Choose file: </label>
             <input ref={inputRef} onChange={(e) => { handlePdfFileChange(e)}} className="d-none" type="file" />
-            <button onClick={handlePdfFileSubmit} className="btn btn-outline-primary">
-              Upload
+            <button onClick={handlePdfFileSubmit} className={`btn btn-outline-${
+          uploadedFileName ? "success" : "primary"
+        }`}>
+              {uploadedFileName ? uploadedFileName : "Upload"}
             </button>
           </div>
           {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
