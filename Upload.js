@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRef } from 'react';
 import './Upload.css';
 import $ from 'jquery';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -8,17 +9,21 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+import 'bootstrap/dist/css/bootstrap.css';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 function Upload() {
   const handleClick = (event) => {
-    console.log('Continue button clicked');
+    event.preventDefault()
+    window.location.href = "/results"
   };
 
   const handleFade = (event) => {
     $(".showResults").fadeIn(3000);
   };
+
+  const inputRef = useRef(null);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [pdfFile, setPdfFile] = useState(null);
@@ -49,6 +54,7 @@ function Upload() {
 
   const handlePdfFileSubmit = (e) => {
     e.preventDefault();
+    inputRef.current?.click();
     if (pdfFile !== null) {
       setViewPdf(pdfFile);
     } else {
@@ -102,14 +108,18 @@ function Upload() {
       <h1>Logged In</h1>
       <br />
       <h1>Upload Your File Below</h1>
-      <button id='uploadFile' onClick={handleFade}>Send for analysis</button>
 
       <div className='container'>
         <br />
         <form className='form-group' onSubmit={handlePdfFileSubmit}>
-          <input type="file" className='form-control'
-            required onChange={(e) => { handlePdfFileChange(e); handlePdfFileSubmit(e); }}
-          />
+          
+          <div className="m-3">
+            <label className="mx-3">Choose file: </label>
+            <input ref={inputRef} onChange={(e) => { handlePdfFileChange(e)}} className="d-none" type="file" />
+            <button onClick={handlePdfFileSubmit} className="btn btn-outline-primary">
+              Upload
+            </button>
+          </div>
           {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
           <br />
           <button type="submit" id='uploadFile' onClick={handleFade}>
@@ -146,4 +156,3 @@ function Upload() {
 }
 
 export default Upload;
-
