@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-import { useRef } from 'react';
 import './Upload.css';
 import $ from 'jquery';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -10,28 +8,20 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
-
+import { useNavigate } from 'react-router-dom';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 function Upload() {
-  const handleClick = (event) => {
-    event.preventDefault()
-    window.location.href = "/results"
-  };
-
-  const handleFade = (event) => {
-    $(".showResults").fadeIn(3000);
-  };
-
-  const [uploadedFileName, setUploadedFileName] = useState(null);
-  const inputRef = useRef(null);
+  const navigate = useNavigate();
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFileError, setPdfFileError] = useState('');
   const [viewPdf, setViewPdf] = useState(null);
   const [serverResponse, setServerResponse] = useState('');
+  const [analysis, setAnalysis] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fileType = ['application/pdf'];
   const handlePdfFileChange = (e) => {
@@ -56,8 +46,6 @@ function Upload() {
 
   const handlePdfFileSubmit = (e) => {
     e.preventDefault();
-    inputRef.current?.click() &&
-    setUploadedFileName(inputRef.current.files[0].name);
     if (pdfFile !== null) {
       setViewPdf(pdfFile);
     } else {
@@ -100,10 +88,45 @@ function Upload() {
       });
       const data = await response.json();
       setServerResponse(data.message || 'Text sent successfully');
+
+      if (data.message === 'Text received successfully') {
+        analyzeText();
+      }
     } catch (error) {
       console.error('Error sending text to server:', error);
       setServerResponse('Failed to send text to server');
     }
+  };
+
+  const analyzeText = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:4008/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const data = await response.json();
+      setAnalysis(data.analysis || 'No analysis available');
+    } catch (error) {
+      console.error('Error analyzing text:', error);
+      setAnalysis('Failed to analyze text');
+    }
+    setLoading(false);
+  };
+
+  const handleCheckAnalysis = () => {
+    navigate('/analyze');
+  };
+
+  const handleFade = () => {
+    $(".showResults").fadeIn(3000);
+  };
+
+  const handleClick = () => {
+    console.log('Continue button clicked');
   };
 
   return (
@@ -111,20 +134,14 @@ function Upload() {
       <h1>Logged In</h1>
       <br />
       <h1>Upload Your File Below</h1>
+      <button id='uploadFile' onClick={handleFade}>Send for analysis</button>
 
       <div className='container'>
         <br />
         <form className='form-group' onSubmit={handlePdfFileSubmit}>
-          
-          <div className="m-3">
-            <label className="mx-3">Choose file: </label>
-            <input ref={inputRef} onChange={(e) => { handlePdfFileChange(e)}} className="d-none" type="file" />
-            <button onClick={handlePdfFileSubmit} className={`btn btn-outline-${
-          uploadedFileName ? "success" : "primary"
-        }`}>
-              {uploadedFileName ? uploadedFileName : "Upload"}
-            </button>
-          </div>
+          <input type="file" className='form-control'
+            required onChange={(e) => { handlePdfFileChange(e); handlePdfFileSubmit(e); }}
+          />
           {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
           <br />
           <button type="submit" id='uploadFile' onClick={handleFade}>
@@ -149,15 +166,24 @@ function Upload() {
         <div className='server-response'>
           <p>{serverResponse}</p>
         </div>
+        <br />
+        <h4>Analysis:</h4>
+        <div className='analysis'>
+          <p>{loading ? 'Analyzing...' : analysis}</p>
+        </div>
       </div>
 
       <br /> <br /> <br />
       <div className='showResults'>
         <button id='Cancel'>Cancel</button>
         <button id='Continue' onClick={handleClick}>Continue</button>
+        <button id='CheckAnalysis' onClick={handleCheckAnalysis} style={{ marginLeft: '10px' }}>
+          Check Analysis
+        </button>
       </div>
     </div>
   );
 }
 
 export default Upload;
+
