@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+import { useRef } from 'react';
 import './Upload.css';
 import $ from 'jquery';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -8,11 +10,16 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
+
 import { useNavigate } from 'react-router-dom';
+
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 function Upload() {
+
+  const [uploadedFileName, setUploadedFileName] = useState(null);
+  const inputRef = useRef(null);
   const navigate = useNavigate();
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -46,6 +53,8 @@ function Upload() {
 
   const handlePdfFileSubmit = (e) => {
     e.preventDefault();
+    inputRef.current?.click() &&
+    setUploadedFileName(inputRef.current.files[0].name);
     if (pdfFile !== null) {
       setViewPdf(pdfFile);
     } else {
@@ -121,12 +130,13 @@ function Upload() {
     navigate('/analyze');
   };
 
-  const handleFade = () => {
-    $(".showResults").fadeIn(3000);
+  const handleClick = (event) => {
+    event.preventDefault()
+    window.location.href = "/results"
   };
 
-  const handleClick = () => {
-    console.log('Continue button clicked');
+  const handleFade = (event) => {
+    $(".showResults").fadeIn(3000);
   };
 
   return (
@@ -134,14 +144,20 @@ function Upload() {
       <h1>Logged In</h1>
       <br />
       <h1>Upload Your File Below</h1>
-      <button id='uploadFile' onClick={handleFade}>Send for analysis</button>
 
       <div className='container'>
         <br />
         <form className='form-group' onSubmit={handlePdfFileSubmit}>
-          <input type="file" className='form-control'
-            required onChange={(e) => { handlePdfFileChange(e); handlePdfFileSubmit(e); }}
-          />
+          
+          <div className="m-3">
+            <label className="mx-3">Choose file: </label>
+            <input ref={inputRef} onChange={(e) => { handlePdfFileChange(e)}} className="d-none" type="file" />
+            <button onClick={handlePdfFileSubmit} className={`btn btn-outline-${
+          uploadedFileName ? "success" : "primary"
+        }`}>
+              {uploadedFileName ? uploadedFileName : "Upload"}
+            </button>
+          </div>
           {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
           <br />
           <button type="submit" id='uploadFile' onClick={handleFade}>
@@ -186,4 +202,3 @@ function Upload() {
 }
 
 export default Upload;
-
