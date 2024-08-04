@@ -1,6 +1,4 @@
-
-import React, { useState } from 'react';
-import { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import './Upload.css';
 import $ from 'jquery';
 import { Viewer } from '@react-pdf-viewer/core';
@@ -10,14 +8,11 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Worker } from '@react-pdf-viewer/core';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.entry';
-
 import { useNavigate } from 'react-router-dom';
-
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 function Upload() {
-
   const [uploadedFileName, setUploadedFileName] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
@@ -31,10 +26,11 @@ function Upload() {
   const [loading, setLoading] = useState(false);
 
   const fileType = ['application/pdf'];
+
   const handlePdfFileChange = (e) => {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
-      if (selectedFile && fileType.includes(selectedFile.type)) {
+      if (fileType.includes(selectedFile.type)) {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
         reader.onloadend = (e) => {
@@ -42,6 +38,7 @@ function Upload() {
           setPdfFileError('');
           extractTextFromPDF(selectedFile);
         };
+        setUploadedFileName(selectedFile.name);
       } else {
         setPdfFile(null);
         setPdfFileError('Please select a valid PDF file');
@@ -53,12 +50,20 @@ function Upload() {
 
   const handlePdfFileSubmit = (e) => {
     e.preventDefault();
-    inputRef.current?.click() &&
-    setUploadedFileName(inputRef.current.files[0].name);
     if (pdfFile !== null) {
       setViewPdf(pdfFile);
     } else {
       setViewPdf(null);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setUploadedFileName(null);
+    setPdfFile(null);
+    setViewPdf(null);
+    setPdfFileError('');
+    if (inputRef.current) {
+      inputRef.current.value = null;
     }
   };
 
@@ -110,7 +115,7 @@ function Upload() {
   const analyzeText = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:4008/analyze', {
+      const response = await fetch('http://localhost:8008/analyze', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,12 +136,12 @@ function Upload() {
   };
 
   const handleClick = (event) => {
-    event.preventDefault()
-    window.location.href = "/results"
+    event.preventDefault();
+    window.location.href = '/results';
   };
 
   const handleFade = (event) => {
-    $(".showResults").fadeIn(3000);
+    $('.showResults').fadeIn(3000);
   };
 
   return (
@@ -145,55 +150,66 @@ function Upload() {
       <br />
       <h1>Upload Your File Below</h1>
 
-      <div className='container'>
+      <div className="container">
         <br />
-        <form className='form-group' onSubmit={handlePdfFileSubmit}>
-          
+        <form className="form-group" onSubmit={handlePdfFileSubmit}>
           <div className="m-3">
             <label className="mx-3">Choose file: </label>
-            <input ref={inputRef} onChange={(e) => { handlePdfFileChange(e)}} className="d-none" type="file" />
-            <button onClick={handlePdfFileSubmit} className={`btn btn-outline-${
-          uploadedFileName ? "success" : "primary"
-        }`}>
-              {uploadedFileName ? uploadedFileName : "Upload"}
+            <input ref={inputRef} onChange={handlePdfFileChange} className="d-none" type="file" />
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className={`btn btn-outline-${uploadedFileName ? 'success' : 'primary'}`}
+            >
+              {uploadedFileName ? uploadedFileName : 'Upload'}
             </button>
+            {uploadedFileName && (
+              <button
+                type="button"
+                onClick={handleRemoveFile}
+                className="btn btn-outline-danger mx-2"
+              >
+                Remove File
+              </button>
+            )}
           </div>
-          {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
+          {pdfFileError && <div className="error-msg">{pdfFileError}</div>}
           <br />
-          <button type="submit" id='uploadFile' onClick={handleFade}>
+          <button type="submit" id="uploadFile" onClick={handleFade}>
             Preview
           </button>
-          <button type="button" id='unpreviewFile' onClick={handleUnpreview} style={{ marginLeft: '10px' }}>
+          <button type="button" id="unpreviewFile" onClick={handleUnpreview} style={{ marginLeft: '10px' }}>
             Unpreview
           </button>
         </form>
         <br />
         <h4>View PDF</h4>
-        <div className='pdf-container'>
-          {viewPdf && <><Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-            <Viewer fileUrl={viewPdf}
-              plugins={[defaultLayoutPluginInstance]} />
-          </Worker></>}
+        <div className="pdf-container">
+          {viewPdf && (
+            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+              <Viewer fileUrl={viewPdf} plugins={[defaultLayoutPluginInstance]} />
+            </Worker>
+          )}
 
           {!viewPdf && <>No PDF file selected</>}
         </div>
         <br />
         <h4>Server Response:</h4>
-        <div className='server-response'>
+        <div className="server-response">
           <p>{serverResponse}</p>
         </div>
         <br />
         <h4>Analysis:</h4>
-        <div className='analysis'>
+        <div className="analysis">
           <p>{loading ? 'Analyzing...' : analysis}</p>
         </div>
       </div>
 
       <br /> <br /> <br />
-      <div className='showResults'>
-        <button id='Cancel'>Cancel</button>
-        <button id='Continue' onClick={handleClick}>Continue</button>
-        <button id='CheckAnalysis' onClick={handleCheckAnalysis} style={{ marginLeft: '10px' }}>
+      <div className="showResults">
+        <button id="Cancel">Cancel</button>
+        <button id="Continue" onClick={handleClick}>Continue</button>
+        <button id="CheckAnalysis" onClick={handleCheckAnalysis} style={{ marginLeft: '10px' }}>
           Check Analysis
         </button>
       </div>
@@ -202,3 +218,4 @@ function Upload() {
 }
 
 export default Upload;
+
