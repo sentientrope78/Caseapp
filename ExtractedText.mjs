@@ -12,11 +12,7 @@ let extractedText = '';
 
 app.post('/api/upload-text', (req, res) => {
   const { text } = req.body;
-
-  // Store the extracted text
   extractedText = text;
-
-  // Respond back to the client
   res.json({ message: 'Text received successfully' });
 });
 
@@ -40,5 +36,4 @@ app.get('/view-text', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
-});
-
+})
