@@ -15,15 +15,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 function Upload() {
   const [uploadedFileName, setUploadedFileName] = useState(null);
   const inputRef = useRef(null);
-  const navigate = useNavigate();
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfFileError, setPdfFileError] = useState('');
   const [viewPdf, setViewPdf] = useState(null);
   const [serverResponse, setServerResponse] = useState('');
-  const [analysis, setAnalysis] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const fileType = ['application/pdf'];
 
@@ -67,10 +64,6 @@ function Upload() {
     }
   };
 
-  const handleUnpreview = () => {
-    setViewPdf(null);
-  };
-
   const extractTextFromPDF = async (file) => {
     const reader = new FileReader();
     reader.onload = async () => {
@@ -82,15 +75,18 @@ function Upload() {
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
+        console.log(textContent)
         const textItems = textContent.items.map((item) => item.str);
-        extractedText += textItems.join(' ');
+        extractedText += textItems.join('\n');
+        
       }
-
+      
+      console.log(extractedText);
+      
       sendTextToServer(extractedText);
     };
     reader.readAsArrayBuffer(file);
   };
-
   const sendTextToServer = async (text) => {
     try {
       const response = await fetch('http://localhost:4007/api/upload-text', {
@@ -100,39 +96,17 @@ function Upload() {
         },
         body: JSON.stringify({ text }),
       });
+      console.log(response);
+      
       const data = await response.json();
       setServerResponse(data.message || 'Text sent successfully');
 
       if (data.message === 'Text received successfully') {
-        analyzeText();
       }
     } catch (error) {
       console.error('Error sending text to server:', error);
       setServerResponse('Failed to send text to server');
     }
-  };
-
-  const analyzeText = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('http://localhost:8008/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      });
-      const data = await response.json();
-      setAnalysis(data.analysis || 'No analysis available');
-    } catch (error) {
-      console.error('Error analyzing text:', error);
-      setAnalysis('Failed to analyze text');
-    }
-    setLoading(false);
-  };
-
-  const handleCheckAnalysis = () => {
-    navigate('/analyze');
   };
 
   const handleClick = (event) => {
@@ -178,9 +152,6 @@ function Upload() {
           <button type="submit" id="uploadFile" onClick={handleFade}>
             Preview
           </button>
-          <button type="button" id="unpreviewFile" onClick={handleUnpreview} style={{ marginLeft: '10px' }}>
-            Unpreview
-          </button>
         </form>
         <br />
         <h4>View PDF</h4>
@@ -199,23 +170,14 @@ function Upload() {
           <p>{serverResponse}</p>
         </div>
         <br />
-        <h4>Analysis:</h4>
-        <div className="analysis">
-          <p>{loading ? 'Analyzing...' : analysis}</p>
-        </div>
       </div>
 
       <br /> <br /> <br />
       <div className="showResults">
-        <button id="Cancel">Cancel</button>
         <button id="Continue" onClick={handleClick}>Continue</button>
-        <button id="CheckAnalysis" onClick={handleCheckAnalysis} style={{ marginLeft: '10px' }}>
-          Check Analysis
-        </button>
       </div>
     </div>
   );
 }
 
 export default Upload;
-
