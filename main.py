@@ -1,110 +1,64 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import os
 import tensorflow as tf
+from config import *
+from train import min_val, range
 
-cwd = os.getcwd()  # Get the current working directory (cwd)
-files = os.listdir(cwd)  # Get all the files in that directory
-print("Files in %r: %s" % (cwd, files))
- 
-# be sure to change the file path
-# if you have the dataset in another
-# directly than the working folder
-df = pd.read_csv('./ml-api/diabetes.csv')
-df.info()
+# Convert range tensor to a Pandas Series (or NumPy array) for proper indexing
+range_series = pd.Series(range.numpy(), index=min_val.index)
 
-# 75% of the data is selected
-train_df = df.sample(frac=0.75, random_state=4) 
+# Load the saved model
+model = tf.keras.models.load_model(INPUT_FP + 'my_model.h5')
 
-# it drops the training data
-# from the original dataframe
-val_df = df.drop(train_df.index)
+# Define the full list of columns (features) used during training
+columns = [
+    'age', 'pregnant', 'min_WBC * 1000', 'max_WBC * 1000', 'min_RBC * 1000000',
+    'max_RBC * 1000000', 'min_hemoglobin', 'max_hemoglobin', 'min_platelet * 100000',
+    'max_platelet * 100000', 'min_glucose * 100', 'max_glucose * 100', 'min_calcium',
+    'max_calcium', 'min_albumin', 'max_albumin', 'min_sodium * 100', 'max_sodium * 100',
+    'min_potassium', 'max_potassium', 'min_creatinine', 'max_creatinine',
+    'type_2_diabetes', 'type_1_diabetes', 'hypertension', 'smoking', 'pneumonia',
+    'fatigue', 'gestational_diabetes', 'polycystic_ovary_syndrome', 'alcoholic',
+    'fertility_treatments', 'chronic_kidney_disease', 'diet', 'ischemic_stroke',
+    'cognitive_changes', 'hyperglycemia', 'left_sided_weakness', 'breast_cancer',
+    'parkinsons', 'tremors', 'stiffness', 'asthma', 'allergies', 'bipolar_disorder',
+    'rheumatoid_arthritis', 'ehlers_danlos_syndrome', 'antiretroviral_therapy',
+    'exercise', 'no_smoking', 'no_alcohol', 'insulin_injection',
+    'glyburide', 'metformin', 'beta_lactams', 'tetracycline', 'acarbose',
+    'sulfonylurease', 'dapagliflozin', 'pioglitazone', 'GLP1RA_therapy', 'lisinopril',
+    'liraglutides', 'exenatide', 'ozempic', 'empagliflozin', 'antipsychotics',
+    'corticosteroids', 'sitagliptin', 'aspirin', 'collagen', 'elastin', 'DPP4_inhibitors'
+]
 
+# Define the corresponding values for these columns
+values = [
+    30, 0, 6000, 13000, 2800000, 4400000, 10.8, 11.7, 250000, 250000,
+    160, 160, 8.8, 10.0, 3.0, 3.5, 139, 139, 3.3, 5.0, 0.7, 0.7,  # Values for existing columns
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  # Fill remaining columns with 0s
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+]
 
-# now let's separate the targets and labels
-X_train = train_df.drop('gender',axis=1)
-X_val = val_df.drop('gender',axis=1)
-y_train = train_df['gender']
-y_val = val_df['gender']
-y_train = pd.get_dummies(train_df['gender'])
-y_val = pd.get_dummies(val_df['gender'])
+print("length of values : ", len(values))
+print("length of columns : ", len(columns))
+# Ensure that the values list matches the number of columns
+assert len(values) == len(columns), f"The number of values ({len(values)}) does not match the number of columns ({len(columns)})."
 
-print("new x train : ", X_train)
-print("y train : ", y_train)
+# Initialize `new_data` with the full set of columns and the values provided
+new_data = pd.DataFrame([values], columns=columns)
 
-# We'll need to pass the shape
-# of features/inputs as an argument
-# in our model, so let's define a variable 
-# to save it.
-input_shape = [X_train.shape[1]]
- 
-print(input_shape)
+# Filter `min_val` and `range_series` to match `new_data`
+min_val_filtered = min_val[new_data.columns]
+range_filtered = range_series[new_data.columns]
 
-print("train df : ", train_df)
-# calling to (0,1) range
-train_df = train_df.drop('gender',axis=1)
-val_df = val_df.drop('gender',axis=1)
-max_val = train_df.max(axis= 0)
-min_val = train_df.min(axis= 0)
+# Preprocess the new data
+new_data = (new_data - min_val_filtered) / range_filtered
 
-#print("max val : ", max_val)
-#print("min val : ", min_val)
- 
-#range = max_val - min_val
-#train_df = (train_df - min_val)/(range)
- 
-#val_df =  (val_df- min_val)/range
+# Make predictions
+predictions = model.predict(new_data)
 
-print("train df : ", train_df)
-print("val df : ", val_df)
-train_df.info()
+# Apply threshold to convert probabilities to binary outcomes
+binary_predictions = (predictions > 0.5).astype(int)
 
-model = tf.keras.Sequential([
- 
-    tf.keras.layers.Dense(units=64, activation='relu',
-                          input_shape=input_shape),
-    tf.keras.layers.Dense(units=64, activation='relu'),
-    tf.keras.layers.Dense(units=1)
-])
-print("summary : ", model.summary())
-
-# adam optimizer works pretty well for
-# all kinds of problems and is a good starting point
-model.compile(optimizer='adam',  
-               
-              # MAE error is good for
-              # numerical predictions
-              loss='mae') 
-
-losses = model.fit(X_train, y_train,
- 
-                   validation_data=(X_val, y_val),
-                    
-                   # it will use 'batch_size' number
-                   # of examples per example
-                   batch_size=256, 
-                   epochs=15,  # total epoch
- 
-                   )
-
-print("losses : ", losses)
-
-
-# this will pass the first 3 rows of features
-# of our data as input to make predictions
-print(model.predict(X_val.iloc[0:3, :]))
-
-print(y_val.iloc[0:3])
-
-
-loss_df = pd.DataFrame(losses.history)
-
-# history stores the loss/val
-# loss in each epoch
-
-# loss_df is a dataframe which
-# contains the losses so we can
-# plot it to visualize our model training
-loss_df.loc[:,['loss','val_loss']].plot()
-plt.show()
+# Output the predictions
+print(binary_predictions)
