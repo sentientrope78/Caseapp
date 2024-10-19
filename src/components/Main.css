@@ -1,0 +1,110 @@
+.button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.LogIn {
+    position: relative;
+    float: left;
+    width: 50%;
+    height: 70%;
+    text-align: center;
+    padding: 20px;
+    margin-right: 20px;
+    font-size: 25px;
+    border-style: solid;
+    border-radius: 15px;
+    left: 40px;
+}
+
+#username, #password {
+    border-radius: 25px;
+    background: #eff0ed;
+    padding: 20px;
+    width: 170px;
+    height: 10px;
+}
+
+.News {
+  position: absolute;
+  right: 45px;
+  top: 100px;
+  width: 350px; /* Adjusted width for a compact layout */
+  padding-left: 10px;
+  padding-right: 10px;
+  border-left: 2px solid #000; /* Keep the left border for structure */
+  display: flex;
+  flex-direction: column; /* Align items vertically */
+  gap: 20px; /* Space between each news item */
+}
+
+.News .news-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid #ccc; /* Adds a subtle line to separate news items */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.News .news-date {
+  font-size: 12px; /* Smaller, subtle text size */
+  color: #999; /* Light grey color for a subtle appearance */
+  margin-top: 5px; /* Adds space between the description and the date */
+  text-align: right; /* Align date to the right for subtle emphasis */
+}
+
+.News img {
+  width: 100%; /* Image takes full width of its container */
+  height: auto; /* Keep aspect ratio intact */
+  border-radius: 5px;
+}
+
+.News a {
+  font-weight: bold;
+  font-size: 18px; /* Slightly larger text for readability */
+  text-align: left;
+}
+
+.News p {
+  font-size: 14px; /* Smaller text for description */
+  color: #666; /* Muted color for secondary text */
+  line-height: 1.4; /* Space out the text slightly */
+}
+
+
+.main {
+  margin-top: 50px;
+}
+
+.main1 {
+  height: 400px;
+}
+
+hr {
+    width: 65%;
+    margin-left: 30px;
+}
+
+.WebUpdates {
+    position: relative;
+    margin-left: 30px;
+    width: 65%;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.CompanyInfo img {
+    width: 650px;
+    height: 500px;
+    display: block;
+    margin-left: 30px;
+    border-radius: 25px;
+}
+
+.CompanyInfo {
+    margin-left: 30px;
+    text-align: left;
+}
