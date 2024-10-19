@@ -8,6 +8,7 @@ function Main() {
         <div className="main">
             <Main1 />
             <Main2 />
+            <br></br><br></br><br></br><br></br><br></br><br></br>
         </div>
     );
 }
@@ -72,25 +73,43 @@ function Login() {
 }
 
 function News() {
+    const [news, setNews] = useState([]);
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/news');
+                setNews(res.data);
+            } catch (err) {
+                console.error('Error fetching the news:', err);
+            }
+        };
+        fetchNews();
+    }, []);
+
     return (
         <div className="News">
             <h3>Medical Updates</h3>
-            <p>No news updates available.</p>
-            <div className="news-item">
-                <img src="#" alt="Breakthrough in diabetes treatment"/>
-                <a href="https://www.chinadaily.com.cn/a/202405/09/WS663c2625a31082fc043c615d.html">
-                    Doctors breakthrough with diabetes treatment in Shanghai
-                </a>
-            </div>
-            <div className="news-item">
-                <img src="#" alt="Doctor shortage in Ontario"/>
-                <a href="https://globalnews.ca/news/10481990/ontario-doctors-supply-ministry-health/">
-                    Doctor shortage in Ontario
-                </a>
-            </div>
+            {news.length === 0 ? (
+                <p>No news updates available.</p>
+            ) : (
+                news.slice(0, 3).map((article, index) => (  // Limit to 3 articles
+                    <div key={index} className="news-item">
+                        {article.image && (
+                            <img src={article.image} alt={article.title} />
+                        )}
+                        <a href={article.url} target="_blank" rel="noopener noreferrer">
+                            {article.title}
+                        </a>
+                        <p>{article.description}</p>
+                        <span className="news-date">{new Date(article.published_at).toLocaleDateString()}</span> {/* Display date */}
+                    </div>
+                ))
+            )}
         </div>
     );
 }
+
 
 function Main2() {
     return (
